@@ -1,5 +1,6 @@
 #include <RH_ASK.h>
 #include "temperature.h"
+#include "STM32LowPower.h"
 // #include "Temperature.ino"
 
 #define RF_TRANSMIT_PIN PA9
@@ -17,7 +18,7 @@ void loop()
 {
   // put your main code here, to run repeatedly:
 
-  int temp;
+  int16_t temp;
   char transmit_str[20];
   temp = temp_sensor.getTemp();
   if (temp){
@@ -30,4 +31,5 @@ void loop()
   rf_driver.waitPacketSent();
 
   delay(200); // Wait for 50ms until the next measurement
+  LowPower.deepSleep(1000);
 }

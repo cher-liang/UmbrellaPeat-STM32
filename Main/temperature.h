@@ -5,13 +5,13 @@ class TemperatureSensor
 {
 private:    
   int temperature_pin;
-  int byte[20];
-  int getBinaryBit() const;
-  int calcTemp() const;
+  uint16_t byte[20];
+  uint16_t getBinaryBit() const;
+  int16_t calcTemp() const;
 
 public:
   TemperatureSensor(int);
-  int getTemp();
+  int16_t getTemp();
 };
 
 #endif
