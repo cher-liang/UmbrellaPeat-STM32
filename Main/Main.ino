@@ -1,22 +1,61 @@
 #include <RH_ASK.h>
-#include "temperature.h"
 #include "STM32LowPower.h"
-// #include "Temperature.ino"
+#include <FlashStorage_STM32.h>
+
+#include "temperature.h"
+#include "flash.h"
 
 #define RF_TRANSMIT_PIN PA9
 #define TEMPERATURE_PIN 2
 
-RH_ASK rf_driver(2000, PA10, RF_TRANSMIT_PIN); // STM32 G431KB
+RH_ASK rf_driver(2000, PA10, RF_TRANSMIT_PIN);  // STM32 G431KB
 TemperatureSensor temp_sensor(TEMPERATURE_PIN);
+FlashStorage flash_storage(0);
 
-void setup()
-{
+
+void setup() {
+  Serial.begin(9600);
   rf_driver.init();
+
+
+  // // FlashStorage Testing
+  // PeatData pData = {
+  //   150,
+  //   -150,
+  //   1023
+  // };
+  // flash_storage.writeFlashData(pData);
+
+  // LowPower.deepSleep(1000);
+
+  // pData.peat_height = 148;
+  // pData.temperature = -90;
+  // flash_storage.writeFlashData(pData);
+
+  // LowPower.deepSleep(1000);
+
+  // PeatData readData = flash_storage.getFlashData();
+  // Serial.println(readData.peat_height);
+  // Serial.println(readData.temperature);
+  // Serial.println(readData.pressure);
+  // readData = flash_storage.getFlashData();
+  // Serial.println(readData.peat_height);
+  // Serial.println(readData.temperature);
+  // Serial.println(readData.pressure);
 }
 
-void loop()
-{
+void loop() {
   // put your main code here, to run repeatedly:
+
+  // // FlashStorage Testing
+
+  // PeatData readData = flash_storage.getFlashData();
+  // Serial.println(readData.peat_height);
+  // Serial.println(readData.temperature);
+  // Serial.println(readData.pressure);
+
+  // delay(1000);
+
 
   int16_t temp;
   char transmit_str[20];
@@ -30,6 +69,6 @@ void loop()
   rf_driver.send((uint8_t *)transmit_str, strlen(transmit_str));
   rf_driver.waitPacketSent();
 
-  delay(200); // Wait for 50ms until the next measurement
-  LowPower.deepSleep(1000);
+  // delay(200); // Wait for 50ms until the next measurement
+  LowPower.deepSleep(5000);
 }
