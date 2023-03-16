@@ -19,7 +19,7 @@ FlashStorage::FlashStorage(int _) {
 //     EEPROM.commit();
 // }
 
-void FlashStorage::writeFlashData(PeatData pData) {
+void FlashStorage::writeFlashData(PeatData pData) { // Write PeatData to flash storage and increment the eeAddress
   Serial.print("Write data at ");
   Serial.println(eeAddress);
 
@@ -39,7 +39,7 @@ void FlashStorage::writeFlashData(PeatData pData) {
 //     return start_timestamp;
 // }
 
-PeatData FlashStorage::getFlashData() {
+PeatData FlashStorage::getFlashData() { // Read PeatData from flash storage and increment eeReadAddress
   Serial.print("Read data at ");
   Serial.println(eeReadAddress);
 
