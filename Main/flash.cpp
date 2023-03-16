@@ -1,14 +1,18 @@
 #include "flash.h"
 
-FlashStorage::FlashStorage(int _) {
-  // Serial.print(F("\nStart EEPROM_put on "));
-  // Serial.println(BOARD_NAME);
-  // Serial.println(FLASH_STORAGE_STM32_VERSION);
-
-  // Serial.print("EEPROM length: ");
-  // Serial.println(EEPROM.length());
-
+FlashStorage::FlashStorage()
+{
   eeAddressMax = EEPROM.length();
+}
+
+void FlashStorage::getFlashStorageInfo()
+{
+  Serial.print(F("\nStart EEPROM_put on "));
+  Serial.println(BOARD_NAME);
+  Serial.println(FLASH_STORAGE_STM32_VERSION);
+
+  Serial.print("EEPROM length: ");
+  Serial.println(EEPROM.length());
 }
 
 // void FlashStorage::writeFlashTimestamp(uint32_t start_timestamp)
@@ -19,11 +23,13 @@ FlashStorage::FlashStorage(int _) {
 //     EEPROM.commit();
 // }
 
-void FlashStorage::writeFlashData(PeatData pData) { // Write PeatData to flash storage and increment the eeAddress
+void FlashStorage::writeFlashData(PeatData pData)
+{ // Write PeatData to flash storage and increment the eeAddress
   Serial.print("Write data at ");
   Serial.println(eeAddress);
 
-  if (eeAddress < (eeAddressMax - sizeof(PeatData))) {
+  if (eeAddress < (eeAddressMax - sizeof(PeatData)))
+  {
     EEPROM.put(eeAddress, pData);
     eeAddress += sizeof(PeatData);
 
@@ -39,18 +45,22 @@ void FlashStorage::writeFlashData(PeatData pData) { // Write PeatData to flash s
 //     return start_timestamp;
 // }
 
-PeatData FlashStorage::getFlashData() { // Read PeatData from flash storage and increment eeReadAddress
+PeatData FlashStorage::getFlashData()
+{ // Read PeatData from flash storage and increment eeReadAddress
   Serial.print("Read data at ");
   Serial.println(eeReadAddress);
 
-  if (eeReadAddress < eeAddress) {
+  if (eeReadAddress < eeAddress)
+  {
     PeatData pData;
     EEPROM.get(eeReadAddress, pData);
 
     eeReadAddress += sizeof(PeatData);
 
     return pData;
-  } else {
+  }
+  else
+  {
     Serial.println("Read address error");
     Serial.print("eeAddress = ");
     Serial.println(eeAddress);
@@ -65,8 +75,10 @@ PeatData FlashStorage::getFlashData() { // Read PeatData from flash storage and 
 
 //     return end_timestamp;
 // }
-void FlashStorage::clearFlash() {
-  for (int i = 0; i < EEPROM.length(); i++) {
+void FlashStorage::clearFlash()
+{
+  for (int i = 0; i < EEPROM.length(); i++)
+  {
     EEPROM.write(i, 0);
   }
 
