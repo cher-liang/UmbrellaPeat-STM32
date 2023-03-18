@@ -8,11 +8,20 @@ float RotaryEncoder::convertRawAngleToDegrees(word newAngle) // returns angle at
   return newAngle * 0.087890625;
 }
 
-void RotaryEncoder::setup()
+void RotaryEncoder::setup(float initial_angle)
+{
+  this->initial_angle=initial_angle;
+
+  // Serial.printf("Initial angle: %d\r\n", (int) this->initial_angle);
+}
+
+float RotaryEncoder::calibrate()
 {
   initial_angle = convertRawAngleToDegrees(ams5600.getRawAngle());
 
-  Serial.printf("Initial Angle Set at %.2f\r\n", initial_angle);
+  Serial.printf("Initial angle: %d\r\n", (int) initial_angle);
+
+  return initial_angle;
 }
 
 void RotaryEncoder::getAngleDifference()
