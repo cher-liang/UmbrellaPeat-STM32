@@ -1,12 +1,24 @@
 #include "flash.h"
 
-FlashStorage::FlashStorage()
-{
+FlashStorage::FlashStorage() {
   eeAddressMax = EEPROM.length();
 }
 
-void FlashStorage::getFlashStorageInfo()
-{
+void FlashStorage::setup() {
+  PeatData temp;
+  for (int i = 4; i < EEPROM.length(); i += 6) {
+    EEPROM.get(i, temp);
+
+    if (temp.peat_height == 0xffffffff && temp.temperature == 0xffffffff && temp.pressure == 0xffff) {  // Check for empty PeatData
+      eeAddress = i;
+      break;
+    }
+  }
+  Serial.print("eeAddress: ");
+  Serial.println(eeAddress);
+}
+
+void FlashStorage::getFlashStorageInfo() {
   Serial.print(F("\nStart EEPROM_put on "));
   Serial.println(BOARD_NAME);
   Serial.println(FLASH_STORAGE_STM32_VERSION);
@@ -15,21 +27,29 @@ void FlashStorage::getFlashStorageInfo()
   Serial.println(EEPROM.length());
 }
 
-// void FlashStorage::writeFlashTimestamp(uint32_t start_timestamp)
-// {
-//     EEPROM.put(eeAddress, start_timestamp);
-//     eeAddress += sizeof(uint32_t);
+void FlashStorage::writeRotaryInitialAngle(float initial_angle) {
+  EEPROM.put(0, initial_angle);
+  EEPROM.commit();
+}
 
-//     EEPROM.commit();
-// }
+float FlashStorage::getRotaryInitialAngle() {
+  float initial_angle;
+  EEPROM.get(0, initial_angle);
 
-void FlashStorage::writeFlashData(PeatData pData)
-{ // Write PeatData to flash storage and increment the eeAddress
+  if (initial_angle != initial_angle) {  // when float is NaN
+    Serial.println("Rotary encoder initial angle not set!");
+    Serial.println("Hold Button B1 (Blue) then press Reset Button (Black)");
+    return 0;
+  } else {
+    return initial_angle;
+  }
+}
+
+void FlashStorage::writeFlashData(PeatData pData) {  // Write PeatData to flash storage and increment the eeAddress
   Serial.print("Write data at ");
   Serial.println(eeAddress);
 
-  if (eeAddress < (eeAddressMax - sizeof(PeatData)))
-  {
+  if (eeAddress < (eeAddressMax - sizeof(PeatData))) {
     EEPROM.put(eeAddress, pData);
     eeAddress += sizeof(PeatData);
 
@@ -37,49 +57,20 @@ void FlashStorage::writeFlashData(PeatData pData)
   }
 }
 
-// uint32_t FlashStorage::getFlashInit()
-// {
-//     uint32_t start_timestamp = 0;
-//     EEPROM.get(0, start_timestamp);
-
-//     return start_timestamp;
-// }
-
-PeatData FlashStorage::getFlashData()
-{ // Read PeatData from flash storage and increment eeReadAddress
+PeatData FlashStorage::getFlashData() {  // Read PeatData from flash storage and increment eeReadAddress
   Serial.print("Read data at ");
   Serial.println(eeReadAddress);
 
-  if (eeReadAddress < eeAddress)
-  {
-    PeatData pData;
-    EEPROM.get(eeReadAddress, pData);
+  PeatData pData;
+  EEPROM.get(eeReadAddress, pData);
+  eeReadAddress += sizeof(PeatData);
 
-    eeReadAddress += sizeof(PeatData);
-
-    return pData;
-  }
-  else
-  {
-    Serial.println("Read address error");
-    Serial.print("eeAddress = ");
-    Serial.println(eeAddress);
-    return {};
-  }
+  return pData;
 }
 
-// PeatData FlashStorage::getFlashEnd()
-// {
-//     uint32_t end_timestamp = 0;
-//     EEPROM.get(eeReadAddress, end_timestamp);
-
-//     return end_timestamp;
-// }
-void FlashStorage::clearFlash()
-{
-  for (int i = 0; i < EEPROM.length(); i++)
-  {
-    EEPROM.write(i, 0);
+void FlashStorage::clearFlash() {
+  for (int i = 0; i < EEPROM.length(); i++) {
+    EEPROM.write(i, -1);
   }
 
   EEPROM.commit();
