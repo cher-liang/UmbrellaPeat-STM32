@@ -36,7 +36,7 @@ void setup() {
 
   PeatData temp;
 
-  flash_storage.setup();
+  uint16_t count=flash_storage.setup();
 
 
   // rf_driver.init();
@@ -50,18 +50,6 @@ void setup() {
   };
   flash_storage.writeFlashData(pData);
 
-  // LowPower.deepSleep(1000);
-
-  // pData.peat_height = 148;
-  // pData.temperature = -90;
-  // flash_storage.writeFlashData(pData);
-
-  // LowPower.deepSleep(1000);
-
-  // readData = flash_storage.getFlashData();
-  // Serial.println(readData.peat_height);
-  // Serial.println(readData.temperature);
-  // Serial.println(readData.pressure);
 }
 
 void loop() {
@@ -74,13 +62,6 @@ void loop() {
   // val = digitalRead(PUSH_BUTTON_1);
   // Serial.printf("Button state: %d\r\n", val);
   delay(1000);
-
-  // // FlashStorage Testing
-
-  // PeatData readData = flash_storage.getFlashData();
-  // Serial.println(readData.peat_height);
-  // Serial.println(readData.temperature);
-  // Serial.println(readData.pressure);
 
   // delay(1000);
 

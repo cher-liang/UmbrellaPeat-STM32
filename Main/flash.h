@@ -20,7 +20,7 @@ private:
 
 public:
   FlashStorage();
-  void setup();
+  uint16_t setup();
   void getFlashStorageInfo();
   void writeRotaryInitialAngle(float);
   float getRotaryInitialAngle();
