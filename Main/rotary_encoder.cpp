@@ -32,11 +32,11 @@ void RotaryEncoder::getAngleDifference()
   Serial.printf("Current Angle: %.2f\r\nAngle Difference: %.2f\r\n", current_angle, angle_difference);
 }
 
-uint16_t RotaryEncoder::getHeight()
+uint16_t RotaryEncoder::getHeight() // return in mm
 {
   if (angle_difference < 90)
   {
-    return arm_length * cos(angle_difference * PI / 180.0) * 100;
+    return arm_length * cos(angle_difference * PI / 180.0) * 10;
   }else{
     Serial.println("Angle exceed 90 degrees!");
   }
