@@ -34,7 +34,7 @@ void setup() {
 
   PeatData temp;
 
-  uint16_t count=flash_storage.setup();
+  uint16_t count = flash_storage.setup();
 
 
   // rf_driver.init();
@@ -47,43 +47,29 @@ void setup() {
     1023
   };
   flash_storage.writeFlashData(pData);
-
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
 
-  // uint16_t elevation = rotary_encoder.getHeight();
-  // Serial.printf("%d.%d\r\n",elevation/100,elevation%100);
-  // int buttonState=digitalRead(PUSH_BUTTON_1);
-  // Serial.print
-  // val = digitalRead(PUSH_BUTTON_1);
-  // Serial.printf("Button state: %d\r\n", val);
   delay(1000);
 
-  // delay(1000);
+
+  // uint16_t elevation = rotary_encoder.getHeight();
+  // Serial.printf("%d mm\r\n",elevation);
+
 
   // int16_t temp;
   // char transmit_str[20];
   // temp = temp_sensor.getTemp();
   // if (temp){
-  //   sprintf(transmit_str, "Temp = %d \x2E %d", (temp/100),(temp%100));
+  //   sprintf(transmit_str, "Temp = %d.%02d", (temp/100),(temp%100));
   // }
   // else{
   //   sprintf(transmit_str, "Start bit not detected");
   // }
   // rf_driver.send((uint8_t *)transmit_str, strlen(transmit_str));
   // rf_driver.waitPacketSent();
-
-  // Serial.println("Entering Sleep mode");
-  // delay(100);
-
-  // LowPower.shutdown(10000);
-  // // LowPower.deepSleep(360000);
-
-  // Serial.println("Exit Sleep mode");
-
-  // delay(10000);
 }
 
 void reset() {
