@@ -19,8 +19,6 @@ TemperatureSensor temp_sensor(TEMPERATURE_PIN);
 FlashStorage flash_storage;
 RotaryEncoder rotary_encoder;
 
-int pushButtonState = 0;
-
 void setup() {
   pinMode(PUSH_BUTTON_1, INPUT);
 
