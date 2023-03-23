@@ -14,19 +14,19 @@ class FlashStorage
 {
 private:
   uint16_t eeAddress = 0;
-  uint16_t eeReadAddress = 0;
+  uint16_t eeReadAddress = 292; //temp
 
   uint16_t eeAddressMax;
 
 public:
   FlashStorage();
+  uint16_t setup();
   void getFlashStorageInfo();
-  // void writeFlashTimestamp(uint32_t);
+  void writeRotaryInitialAngle(float);
+  float getRotaryInitialAngle();
   void writeFlashData(PeatData);
-  void clearFlash();
-  // uint32_t getFlashInit();
   PeatData getFlashData();
-  // uint32_t getFlashEnd();
-};
+  void clearFlash();
+};  
 
 #endif
