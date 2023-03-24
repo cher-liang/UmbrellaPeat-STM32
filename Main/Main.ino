@@ -6,17 +6,20 @@
 #include <RH_ASK.h>
 #include <AS5600.h>
 
-#include "temperature.h"
 #include "flash.h"
+#include "temperature.h"
+#include "pressure.h"
 #include "rotary_encoder.h"
 
 #define RF_TRANSMIT_PIN PA9
 #define TEMPERATURE_PIN 2
+#define PRESSURE_SS_PIN 10
 #define PUSH_BUTTON_1 PC13
 
 RH_ASK rf_driver(2000, PA10, RF_TRANSMIT_PIN);  // STM32 G431KB
-TemperatureSensor temp_sensor(TEMPERATURE_PIN);
 FlashStorage flash_storage;
+TemperatureSensor temp_sensor(TEMPERATURE_PIN);
+PressureSensor pressure_sensor(PRESSURE_SS_PIN);
 RotaryEncoder rotary_encoder;
 
 void setup() {
@@ -31,6 +34,8 @@ void setup() {
   } else {
     rotary_encoder.setup(flash_storage.getRotaryInitialAngle());
   }
+
+  pressure_sensor.setup();
 
   PeatData temp;
 
@@ -53,6 +58,7 @@ void loop() {
   // put your main code here, to run repeatedly:
 
   delay(1000);
+  pressure_sensor.getPressure();
 
 
   // uint16_t elevation = rotary_encoder.getHeight();
