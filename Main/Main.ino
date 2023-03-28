@@ -48,47 +48,11 @@ void setup()
 
   uint16_t count = flash_storage.setup();
 
-  uint16_t elevation = rotary_encoder.getHeight();
-  int16_t temperature = temp_sensor.getTemp();
-  uint16_t pressure = pressure_sensor.getPressure();
-
-  PeatData pData = {
-      elevation,
-      temperature,
-      pressure};
-
-  flash_storage.writeFlashData(pData);
+  measure_peat();
 
   if ((count + 1) >= 336)
   {
-    rf_driver.init();
-
-    PeatData temporary;
-    char rf_transmit_str[60];
-
-    for (int i = 0; i < 336; i++)
-    {
-      temporary = flash_storage.getFlashData();
-
-      char dataBuf[20];
-      sprintf(dataBuf,
-              "%d,%d,%d,%d;",
-              i,
-              temporary.peat_height,
-              temporary.temperature,
-              temporary.pressure);
-
-      strcat(rf_transmit_str, dataBuf);
-      if (i % 3 == 0)
-      {
-        rf_driver.send((uint8_t *)rf_transmit_str, strlen(rf_transmit_str));
-        rf_driver.waitPacketSent();
-
-        memset(rf_transmit_str, '\0', sizeof(char) * 60);
-      }
-    }
-
-    flash_storage.clearFlash();
+    transmit_data();
   }
 
   LowPower.shutdown(5000 - (millis() - start_time));
@@ -127,4 +91,50 @@ void reset()
   // delay(5000);
   // float initial_angle = rotary_encoder.calibrate();
   // flash_storage.writeRotaryInitialAngle(initial_angle);
+}
+
+void measure_peat() // take measurement and save to flash
+{
+  uint16_t elevation = rotary_encoder.getHeight();
+  int16_t temperature = temp_sensor.getTemp();
+  uint16_t pressure = pressure_sensor.getPressure();
+
+  PeatData pData = {
+      elevation,
+      temperature,
+      pressure};
+
+  flash_storage.writeFlashData(pData);
+}
+
+void transmit_data() //read flash and transmit data
+{
+  rf_driver.init();
+
+  PeatData temporary;
+  char rf_transmit_str[60];
+
+  for (int i = 0; i < 336; i++)
+  {
+    temporary = flash_storage.getFlashData();
+
+    char dataBuf[20];
+    sprintf(dataBuf,
+            "%d,%d,%d,%d;",
+            i,
+            temporary.peat_height,
+            temporary.temperature,
+            temporary.pressure);
+
+    strcat(rf_transmit_str, dataBuf);
+    if (i % 3 == 0)
+    {
+      rf_driver.send((uint8_t *)rf_transmit_str, strlen(rf_transmit_str));
+      rf_driver.waitPacketSent();
+
+      memset(rf_transmit_str, '\0', sizeof(char) * 60);
+    }
+  }
+
+  flash_storage.clearFlash();
 }
