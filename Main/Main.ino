@@ -59,7 +59,7 @@ void setup()
 
   flash_storage.writeFlashData(pData);
 
-  if (count + 1 % 336 == 0)
+  if ((count + 1) >= 336)
   {
     rf_driver.init();
 
@@ -89,7 +89,6 @@ void setup()
     }
 
     flash_storage.clearFlash();
-
   }
 
   LowPower.shutdown(5000 - (millis() - start_time));
