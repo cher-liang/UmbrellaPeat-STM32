@@ -38,5 +38,5 @@ uint16_t PressureSensor::getPressure() // return in PSI x100
     pressure_kilopascals = pressure * 6894.757 * 1000;
 
 
-    return (uint16_t)pressure * 100;
+    return (uint16_t)pressure_kilopascals * 100;
 }
