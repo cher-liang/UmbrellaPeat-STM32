@@ -33,6 +33,10 @@ uint16_t PressureSensor::getPressure() // return in PSI x100
 
     // calculation of pressure value according to equation 2 of datasheet
     pressure = ((press_counts - outputmin) * (pmax - pmin)) / (outputmax - outputmin) + pmin;
+    
+     // calculate pressure in kilopascals
+    pressure_kilopascals = pressure * 6894.757 * 1000;
+
 
     return (uint16_t)pressure * 100;
 }
