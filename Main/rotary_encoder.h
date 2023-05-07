@@ -17,9 +17,10 @@ private:
   AMS_5600 ams5600;
 
   float initial_angle;
+  float angle_offset=22.36;
   float angle_difference;
 
-  uint8_t arm_length = 17;
+  uint8_t arm_length = 25;
 
   float convertRawAngleToDegrees(word);
 
