@@ -13,8 +13,8 @@ struct PeatData
 class FlashStorage
 {
 private:
-  uint16_t eeAddress = 0;
-  uint16_t eeReadAddress = 292; //temp
+  uint16_t eeAddress = 4;
+  uint16_t eeReadAddress = 4; //temp
 
   uint16_t eeAddressMax;
 
